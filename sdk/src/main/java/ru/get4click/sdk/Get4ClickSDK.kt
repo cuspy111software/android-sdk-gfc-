@@ -1,13 +1,23 @@
 package ru.get4click.sdk
 
+import android.content.Context
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import ru.get4click.sdk.api.WheelOfFortune
+import ru.get4click.sdk.api.WheelOfFortuneImpl
+import ru.get4click.sdk.data.WheelOfFortuneService
 import ru.get4click.sdk.models.Banner
 import ru.get4click.sdk.models.Order
-import ru.get4click.sdk.view.BannerView
+import ru.get4click.sdk.ui.wheeloffortune.WheelOfFortuneConfig
+import ru.get4click.sdk.view.FortuneWheelView
+import kotlin.coroutines.CoroutineContext
 
 object Get4ClickSDK {
     
     private var shopId = 0
     private var orderMap: MutableMap<String, Order> = HashMap<String, Order>()
+
+    private val sdkScope = CoroutineScope(SupervisorJob())
 
     fun getShopId(): Int {
         return shopId
@@ -61,4 +71,25 @@ object Get4ClickSDK {
         orderMap.put("current", Order())
     }
 
+    /**
+     * Creates an instance of [WheelOfFortune]
+     *
+     * @param autoOpenTimeout Wheel of fortune is opening after [autoOpenTimeout] milliseconds
+     * automatically. Optional parameter. You can show the wheel with help of [WheelOfFortune.show]
+     */
+    fun createWheelOfFortune(
+        context: Context,
+        viewConfig: WheelOfFortuneConfig,
+        autoOpenTimeout: Long? = null
+    ): WheelOfFortune {
+        return WheelOfFortuneImpl(
+            scope = sdkScope,
+            token = shopId.toString(),
+            autoOpenTimeout = autoOpenTimeout,
+            config = viewConfig,
+            wheelOfFortuneApi = WheelOfFortuneService()
+        ) {
+
+        }
+    }
 }

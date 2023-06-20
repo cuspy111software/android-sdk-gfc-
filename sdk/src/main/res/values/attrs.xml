@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FortuneWheelView">
+        <!--    The text size of a text inside each sector    -->
+        <attr name="text_size" format="dimension"/>
+
+        <!--    The color of the border around the wheel    -->
+        <attr name="border_color" format="color"/>
+
+        <!--    The width of the border around the wheel    -->
+        <attr name="border_width" format="dimension"/>
+
+        <!--    The width of the circle of the pivot in the center of the wheel    -->
+        <attr name="pivot_circle_width" format="dimension"/>
+
+        <!--    The color of the circle border of the pivot in the center of the wheel    -->
+        <attr name="pivot_circle_border_color" format="color"/>
+
+        <!--    The color of the circle filling of the pivot in the center of the wheel    -->
+        <attr name="pivot_circle_filling_color" format="color"/>
+    </declare-styleable>
+</resources>
