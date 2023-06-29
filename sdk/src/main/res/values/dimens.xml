@@ -2,11 +2,17 @@
 <resources>
     <!--  Text  -->
     <dimen name="text_size_tiny">6sp</dimen>
+    <dimen name="text_size_small">8sp</dimen>
+    <dimen name="text_size_xsmall">10sp</dimen>
+    <dimen name="text_size_normal">12sp</dimen>
     <dimen name="text_size_big">16sp</dimen>
     <dimen name="text_size_large">24sp</dimen>
 
     <!--  Dimensions  -->
-    <dimen name="margin_small">12dp</dimen>
+    <dimen name="margin_tiny">4dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_xsmall">10dp</dimen>
+    <dimen name="margin_xxsmall">12dp</dimen>
     <dimen name="margin_normal">16dp</dimen>
     <dimen name="margin_big">20dp</dimen>
     <dimen name="margin_large">24dp</dimen>
@@ -19,4 +25,14 @@
     <dimen name="edit_text_height">48dp</dimen>
     <dimen name="edit_text_horizontal_margin">42dp</dimen>
     <dimen name="button_primary_height">64dp</dimen>
+
+    <dimen name="card_corner_radius">10dp</dimen>
+
+    <!--  Banner Promo Code  -->
+    <dimen name="discount_bottom_text_size">5sp</dimen>
+    <dimen name="banner_promo_code_title_text_size">24sp</dimen>
+
+    <dimen name="discount_card_height">40dp</dimen>
+    <dimen name="promo_code_copy_button_height">72dp</dimen>
+    <dimen name="arrow_back_in_circle_size">14dp</dimen>
 </resources>

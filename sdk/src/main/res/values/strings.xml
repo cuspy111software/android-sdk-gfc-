@@ -5,4 +5,12 @@
     <string name="data_processing_agreement">Я согласен на обработку персональных данных</string>
     <string name="close">Закрыть</string>
     <string name="general_error_text">Сервис недоступен, попробуйте еще раз</string>
+
+    <string name="copy">Скопировать</string>
+    <string name="promo_code_already_applied"><u>Спасибо, промокод уже применён</u></string>
+    <string name="more"><u>Подробнее</u></string>
+    <string name="your_discount">Ваша скидка</string>
+    <string name="your_promo_code">Ваш промокод</string>
+    <string name="promo_code_saved_to_clipboard">Промокод скопирован в буфер</string>
+    <string name="go_back"><u>Вернуться назад</u></string>
 </resources>
