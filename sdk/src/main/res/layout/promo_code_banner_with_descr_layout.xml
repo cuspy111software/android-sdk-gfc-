@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="0dp">
+
+    <LinearLayout
+        android:id="@+id/banner_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/margin_xxsmall"
+        android:paddingVertical="@dimen/margin_xxsmall"
+        android:orientation="vertical"
+        android:background="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical">
+                <TextView
+                    android:id="@+id/text_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_large"
+                    android:fontFamily="@font/averta_cy"
+                    tools:text="FINN FLARE"/>
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:paddingHorizontal="@dimen/margin_normal"
+                android:paddingVertical="@dimen/margin_tiny"
+                android:orientation="vertical"
+                android:background="@drawable/discount_background">
+                <TextView
+                    android:id="@+id/text_discount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/banner_promo_code_title_text_size"
+                    tools:text="-10%"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/discount_bottom_text_color"
+                    android:fontFamily="@font/averta_cy"
+                    android:textSize="@dimen/discount_bottom_text_size"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.4"
+                    android:text="@string/your_discount"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_xxsmall"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_text"
+            tools:itemCount="5"/>
+
+        <LinearLayout
+            android:id="@+id/text_button_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:layout_width="@dimen/arrow_back_in_circle_size"
+                android:layout_height="@dimen/arrow_back_in_circle_size"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_info_green"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="@dimen/margin_tiny"
+                android:textColor="@color/banner_promo_primary_color"
+                android:fontFamily="@font/averta_cy"
+                android:text="@string/more"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_promo_code_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:textColor="@color/color_text_black"
+            android:fontFamily="@font/averta_cy"
+            android:textStyle="bold"
+            android:textSize="@dimen/banner_promo_code_title_text_size"
+            tools:text="Your promo code"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_xxsmall"
+            app:boxStrokeWidth="1dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_promo_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:inputType="none"
+                android:enabled="false"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/promo_code_color"
+                tools:text="DKOADKO21321321ASDAASD"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_copy"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/promo_code_copy_button_height"
+            android:layout_marginTop="@dimen/margin_xxsmall"
+            android:backgroundTint="@color/banner_promo_primary_color"
+            android:textSize="@dimen/text_size_big"
+            android:textAllCaps="false"
+            android:text="@string/copy"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:id="@+id/image_back"
+                android:layout_width="@dimen/arrow_back_in_circle_size"
+                android:layout_height="@dimen/arrow_back_in_circle_size"
+                android:layout_gravity="center_vertical"
+                android:visibility="gone"
+                android:src="@drawable/ic_arrow_back_in_circle"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/text_button_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="@dimen/margin_tiny"
+                android:textColor="@color/banner_promo_code_text_color"
+                android:fontFamily="@font/averta_cy"
+                android:text="@string/promo_code_already_applied"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

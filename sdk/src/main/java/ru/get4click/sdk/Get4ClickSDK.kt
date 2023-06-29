@@ -6,12 +6,19 @@ import kotlinx.coroutines.SupervisorJob
 import ru.get4click.sdk.api.WheelOfFortune
 import ru.get4click.sdk.api.WheelOfFortuneImpl
 import ru.get4click.sdk.data.WheelOfFortuneService
+import ru.get4click.sdk.api.BannerPromoCode
+import ru.get4click.sdk.api.SimpleBannerPromoCode
+import ru.get4click.sdk.data.BannerPromoCodeService
+import ru.get4click.sdk.data.models.Email
 import ru.get4click.sdk.models.Banner
+import ru.get4click.sdk.models.BannerPromoCodeStaticConfig
 import ru.get4click.sdk.models.Order
+import ru.get4click.sdk.ui.bannerpromocode.PromoCodeCreds
+import ru.get4click.sdk.utils.isEmail
 
 object Get4ClickSDK {
 
-    internal val TAG = "Get4Click"
+    internal const val TAG = "Get4Click"
 
     private var shopId = 0
     private var orderMap: MutableMap<String, Order> = HashMap<String, Order>()
@@ -90,6 +97,28 @@ object Get4ClickSDK {
             wheelOfFortuneApi = WheelOfFortuneService(),
             onInit            = onInit,
             onInitFailed      = onInitFailed
+        )
+    }
+
+    /**
+     * Creates an instance of simple implementation of [BannerPromoCode]
+     *
+     * @param activity
+     * @param config configure promo code banner view
+     */
+    fun createSimpleBannerPromoCode(
+        activity: ComponentActivity,
+        apiKey: String,
+        email: String,
+        config: BannerPromoCodeStaticConfig = BannerPromoCodeStaticConfig()
+    ): BannerPromoCode {
+        require(email.isEmail()) { "[email] is not correct" }
+
+        return SimpleBannerPromoCode(
+            activity           = activity,
+            promoCodeCreds     = PromoCodeCreds(Email(email), apiKey),
+            config             = config,
+            bannerPromoCodeApi = BannerPromoCodeService()
         )
     }
 }
