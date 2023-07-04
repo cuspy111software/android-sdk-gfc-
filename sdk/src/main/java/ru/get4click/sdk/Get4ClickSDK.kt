@@ -1,14 +1,15 @@
 package ru.get4click.sdk
 
 import androidx.activity.ComponentActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import ru.get4click.sdk.api.WheelOfFortune
+import kotlinx.coroutines.MainScope
+import ru.get4click.sdk.api.*
+import ru.get4click.sdk.api.SimpleBannerPromoCode
 import ru.get4click.sdk.api.WheelOfFortuneImpl
+import ru.get4click.sdk.data.BannerPromoCodeService
+import ru.get4click.sdk.data.CrossMailService
 import ru.get4click.sdk.data.WheelOfFortuneService
 import ru.get4click.sdk.api.BannerPromoCode
-import ru.get4click.sdk.api.SimpleBannerPromoCode
-import ru.get4click.sdk.data.BannerPromoCodeService
 import ru.get4click.sdk.data.models.Email
 import ru.get4click.sdk.models.Banner
 import ru.get4click.sdk.models.BannerPromoCodeStaticConfig
@@ -23,7 +24,17 @@ object Get4ClickSDK {
     private var shopId = 0
     private var orderMap: MutableMap<String, Order> = HashMap<String, Order>()
 
-    private val sdkScope = CoroutineScope(SupervisorJob())
+    private val sdkScope = MainScope()
+
+    private var _crossMail: CrossMail? = null
+
+    /**
+     * Returns the [CrossMail] singleton that can be used across the app
+     */
+    fun getCrossMail(apiKey: String): CrossMail {
+        return _crossMail ?: CrossMailImpl(CrossMailService(), sdkScope, apiKey)
+            .also { _crossMail = it }
+    }
 
     fun getShopId(): Int {
         return shopId
