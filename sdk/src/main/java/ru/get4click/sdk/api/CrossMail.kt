@@ -2,6 +2,9 @@ package ru.get4click.sdk.api
 
 import ru.get4click.sdk.models.CrossMailStatus
 
+/**
+ * Used to send user status
+ */
 interface CrossMail {
     /**
      * Sends status [Int] of an user with defined [email]

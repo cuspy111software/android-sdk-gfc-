@@ -93,21 +93,18 @@ object Get4ClickSDK {
      *
      * @param activity the host activity
      * @param apiKey client API key
-     * @param onInit callback triggered when the WOF is initialized
-     * @param onInitFailed callback triggered when WOF initialization failed
+     * @param wheelOfFortuneListener listens for WOF events
      */
     fun createWheelOfFortune(
         activity: ComponentActivity,
         apiKey: String,
-        onInit: (WheelOfFortune) -> Unit = { },
-        onInitFailed: (e: Throwable) -> Unit = { }
+        wheelOfFortuneListener: WheelOfFortuneListener = object : WheelOfFortuneListener { }
     ): WheelOfFortune {
         return WheelOfFortuneImpl(
-            activity          = activity,
-            apiKey            = apiKey,
-            wheelOfFortuneApi = WheelOfFortuneService(),
-            onInit            = onInit,
-            onInitFailed      = onInitFailed
+            activity               = activity,
+            apiKey                 = apiKey,
+            wheelOfFortuneApi      = WheelOfFortuneService(),
+            wheelOfFortuneListener = wheelOfFortuneListener
         )
     }
 
@@ -115,13 +112,17 @@ object Get4ClickSDK {
      * Creates an instance of simple implementation of [BannerPromoCode]
      *
      * @param activity
+     * @param apiKey client's API Key
+     * @param email user email
      * @param config configure promo code banner view
+     * @param promoCodeListener listens for Banner Promo Code events
      */
     fun createSimpleBannerPromoCode(
         activity: ComponentActivity,
         apiKey: String,
         email: String,
-        config: BannerPromoCodeStaticConfig = BannerPromoCodeStaticConfig()
+        config: BannerPromoCodeStaticConfig = BannerPromoCodeStaticConfig(),
+        promoCodeListener: BannerPromoCodeListener = object : BannerPromoCodeListener { }
     ): BannerPromoCode {
         require(email.isEmail()) { "[email] is not correct" }
 
@@ -129,7 +130,8 @@ object Get4ClickSDK {
             activity           = activity,
             promoCodeCreds     = PromoCodeCreds(Email(email), apiKey),
             config             = config,
-            bannerPromoCodeApi = BannerPromoCodeService()
+            bannerPromoCodeApi = BannerPromoCodeService(),
+            promoCodeListener  = promoCodeListener
         )
     }
 }

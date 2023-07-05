@@ -10,14 +10,15 @@ import ru.get4click.sdk.models.BannerPromoCodeConfig
 import ru.get4click.sdk.models.BannerPromoCodeStaticConfig
 import ru.get4click.sdk.ui.bannerpromocode.BannerPromoCodeDialog
 import ru.get4click.sdk.ui.bannerpromocode.BannerPromoCodeWithDetailsDialog
-import ru.get4click.sdk.ui.bannerpromocode.SimpleBannerPromoCodeDialog
 import ru.get4click.sdk.ui.bannerpromocode.PromoCodeCreds
+import ru.get4click.sdk.ui.bannerpromocode.SimpleBannerPromoCodeDialog
 
 internal class SimpleBannerPromoCode(
     private val activity: ComponentActivity,
     private val promoCodeCreds: PromoCodeCreds,
     private val config: BannerPromoCodeStaticConfig,
-    private val bannerPromoCodeApi: BannerPromoCodeApi
+    private val bannerPromoCodeApi: BannerPromoCodeApi,
+    private val promoCodeListener: BannerPromoCodeListener
 ) : BannerPromoCode {
     private var bannerDialog: BannerPromoCodeDialog? = null
 
@@ -33,13 +34,15 @@ internal class SimpleBannerPromoCode(
                         title        = "",
                         discountText = promoCodeModel.couponTitle,
                         description  = promoCodeModel.couponDescription,
-                        limitations  = promoCodeModel.couponLimitations,
-                        restrictions = promoCodeModel.orderRestrictions,
+                        limitations  = promoCodeModel.couponLimitations.ifEmpty { null },
+                        restrictions = promoCodeModel.orderRestrictions.ifEmpty { null },
                         promoCode    = promoCodeModel.couponCode,
                         staticConfig = config
                     )
-                }.onFailure {
-                    Log.e(TAG, it.message ?: "")
+                    promoCodeListener.onInit()
+                }.onFailure { e ->
+                    Log.e(TAG, e.message ?: "")
+                    promoCodeListener.onInitFailed(e)
                 }
         }
     }
