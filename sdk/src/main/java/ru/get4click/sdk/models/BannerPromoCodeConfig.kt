@@ -14,6 +14,7 @@ internal data class BannerPromoCodeConfig(
     val description: String,
     val limitations: String? = null,
     val restrictions: String? = null,
+    val logo: String? = null,
     val promoCode: String,
     val staticConfig: BannerPromoCodeStaticConfig
 )

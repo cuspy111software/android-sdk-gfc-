@@ -14,7 +14,7 @@ internal class BannerPromoCodeService : BannerPromoCodeApi {
         promoCodeCreds: PromoCodeCreds
     ): Result<PromoCodeApiModel> {
         val (_, _, result) = Fuel
-            .get("https://get4click.ru/api/${promoCodeCreds.apiKey}/coupon-code/active")
+            .get("https://staging.get4click.ru/api/${promoCodeCreds.apiKey}/coupon-code/active")
             .apply { parameters = listOf("email" to promoCodeCreds.email.value) }
             .responseJson()
 

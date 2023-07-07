@@ -8,9 +8,15 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.get4click.sdk.R
 import ru.get4click.sdk.databinding.PromoCodeBannerLayoutBinding
 import ru.get4click.sdk.models.BannerPromoCodeConfig
+import ru.get4click.sdk.utils.Image
+import ru.get4click.sdk.utils.ImageDownloader
 import ru.get4click.sdk.utils.copyTextToClipboard
 
 internal class SimpleBannerPromoCodeDialog(
@@ -29,13 +35,11 @@ internal class SimpleBannerPromoCodeDialog(
         adjustDialogWithPercents()
 
         with(binding) {
-            textTitle.text = config.title
             textDiscount.text = config.discountText
             textDescription.text = config.description
             textPromoCodeTitle.text = config.staticConfig.promoCodeTitle
                 ?: context.getString(R.string.your_promo_code)
 
-            config.staticConfig.topPartTextColor?.let(textTitle::setTextColor)
             config.staticConfig.topPartTextColor?.let(textDescription::setTextColor)
             config.staticConfig.bottomPartTextColor?.let(textPromoCodeTitle::setTextColor)
             config.staticConfig.primaryButtonTextColor?.let(buttonCopy::setTextColor)
@@ -55,6 +59,27 @@ internal class SimpleBannerPromoCodeDialog(
             }
 
             textButtonBottom.setOnClickListener { dismiss() }
+
+            dialogScope.launch(Dispatchers.IO) {
+                if (config.logo != null) {
+                    val logo = ImageDownloader.downloadInto(config.logo)
+                    withContext(Dispatchers.Main) {
+                        when (logo) {
+                            is Image.Svg -> {
+                                binding.imageLogo.isVisible = false
+                                binding.webviewLogo.isVisible = true
+                                binding.webviewLogo.loadUrl(logo.path)
+                            }
+                            is Image.BitmapImg -> {
+                                binding.imageLogo.isVisible = true
+                                binding.webviewLogo.isVisible = false
+                                binding.imageLogo.setImageBitmap(logo.bitmap)
+                            }
+                            else -> { /* no-op */ }
+                        }
+                    }
+                }
+            }
         }
     }
 
