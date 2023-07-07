@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical">
 
-
-    <ru.get4click.sdk.view.BannerView
-        android:id="@+id/bannerView"
+    <Button
+        android:id="@+id/button_banner_promo_code"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Banner Promo Code"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <Button
+        android:id="@+id/button_wheel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Wheel Of Fortune"/>
+
+    <Button
+        android:id="@+id/button_cross_mail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send cross mail"/>
+
+</LinearLayout>
