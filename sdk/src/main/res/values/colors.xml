@@ -7,4 +7,11 @@
     <color name="error">@android:color/holo_red_light</color>
 
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/color_primary</color>
+    
+    <!--  Banner Promo Code  -->
+    <color name="discount_background_color">#E01D1D</color>
+    <color name="discount_bottom_text_color">#FFA1A1</color>
+    <color name="banner_promo_code_text_color">#686868</color>
+    <color name="promo_code_color">#777777</color>
+    <color name="banner_promo_primary_color">#94BC35</color>
 </resources>
