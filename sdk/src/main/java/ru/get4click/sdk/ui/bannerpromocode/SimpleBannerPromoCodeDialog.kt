@@ -7,8 +7,11 @@ import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.ViewGroup
+import android.widget.Toast
+import ru.get4click.sdk.R
 import ru.get4click.sdk.databinding.PromoCodeBannerLayoutBinding
 import ru.get4click.sdk.models.BannerPromoCodeConfig
+import ru.get4click.sdk.utils.copyTextToClipboard
 
 internal class SimpleBannerPromoCodeDialog(
     context: Context,
@@ -30,6 +33,7 @@ internal class SimpleBannerPromoCodeDialog(
             textDiscount.text = config.discountText
             textDescription.text = config.description
             textPromoCodeTitle.text = config.staticConfig.promoCodeTitle
+                ?: context.getString(R.string.your_promo_code)
 
             config.staticConfig.topPartTextColor?.let(textTitle::setTextColor)
             config.staticConfig.topPartTextColor?.let(textDescription::setTextColor)
@@ -41,6 +45,16 @@ internal class SimpleBannerPromoCodeDialog(
             config.staticConfig.bottomPartColor?.let(layoutBottomPart::setBackgroundColor)
 
             editTextPromoCode.setText(config.promoCode)
+
+            buttonCopy.setOnClickListener {
+                context.copyTextToClipboard(editTextPromoCode.text.toString())
+                val toastText = context.getString(R.string.promo_code_saved_to_clipboard)
+                Toast
+                    .makeText(context, toastText, Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+            textButtonBottom.setOnClickListener { dismiss() }
         }
     }
 

@@ -21,8 +21,7 @@ internal class WheelOfFortuneImpl(
     private val activity: ComponentActivity,
     private val apiKey: String,
     private val wheelOfFortuneApi: WheelOfFortuneApi,
-    private val onInit: (WheelOfFortune) -> Unit,
-    private val onInitFailed: (e: Throwable) -> Unit
+    private val wheelOfFortuneListener: WheelOfFortuneListener
 ) : WheelOfFortune, WheelOfFortuneDialogInteractor {
 
     private var wheelOfFortuneDialog: WheelOfFortuneDialog? = null
@@ -34,7 +33,7 @@ internal class WheelOfFortuneImpl(
                 .onFailure { e ->
                     Log.e(Get4ClickSDK.TAG, "Wheel Of Fortune failed on INIT step")
                     Log.i(Get4ClickSDK.TAG, e.stackTraceToString())
-                    withContext(Dispatchers.Main) { onInitFailed.invoke(e) }
+                    withContext(Dispatchers.Main) { wheelOfFortuneListener.onInitFailed(e) }
 
                 }
                 .onSuccess {
@@ -46,7 +45,9 @@ internal class WheelOfFortuneImpl(
                         requestShow(config)
                     }
 
-                    withContext(Dispatchers.Main) { onInit.invoke(this@WheelOfFortuneImpl) }
+                    withContext(Dispatchers.Main) {
+                        wheelOfFortuneListener.onInit(this@WheelOfFortuneImpl)
+                    }
                 }
         }
     }
@@ -72,11 +73,13 @@ internal class WheelOfFortuneImpl(
                             ?.showError(activity.getString(R.string.general_error_text))
                         Log.e(Get4ClickSDK.TAG, "Wheel Of Fortune failed on SHOW step")
                         Log.i(Get4ClickSDK.TAG, e.stackTraceToString())
+                        wheelOfFortuneListener.onShowFailed(e)
                     }
                 }
                 .onSuccess {
                     withContext(Dispatchers.Main) {
                         wheelOfFortuneDialog?.setReady()
+                        wheelOfFortuneListener.onShow()
                     }
                 }
         }

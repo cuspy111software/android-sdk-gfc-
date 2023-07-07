@@ -3,8 +3,9 @@ package ru.get4click.sdk.data
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.json.responseJson
 import org.json.JSONException
-import org.json.JSONObject
+import ru.get4click.sdk.data.models.Get4ClickApiException
 import ru.get4click.sdk.data.models.promocode.PromoCodeApiModel
+import ru.get4click.sdk.data.utlis.isStatusOk
 import ru.get4click.sdk.data.utlis.parseToModel
 import ru.get4click.sdk.ui.bannerpromocode.PromoCodeCreds
 
@@ -13,19 +14,19 @@ internal class BannerPromoCodeService : BannerPromoCodeApi {
         promoCodeCreds: PromoCodeCreds
     ): Result<PromoCodeApiModel> {
         val (_, _, result) = Fuel
-            .get("https://staging.get4click.ru/api/${promoCodeCreds.apiKey}/coupon-code/active")
+            .get("https://get4click.ru/api/${promoCodeCreds.apiKey}/coupon-code/active")
             .apply { parameters = listOf("email" to promoCodeCreds.email.value) }
             .responseJson()
 
         return result.fold(
             success = { responseData ->
                 try {
-                    val jsonResult = responseData.obj()
-                    if (jsonResult.isStatusOk()) {
+                    val jsonResp = responseData.obj()
+                    if (jsonResp.isStatusOk()) {
                         val data = responseData.obj().getJSONObject("data")
                         Result.success(data.parseToModel())
                     } else {
-                        Result.failure(Exception())
+                        Result.failure(Get4ClickApiException(jsonResp.optString("error")))
                     }
                 } catch (e: JSONException) {
                     Result.failure(e)
@@ -33,9 +34,5 @@ internal class BannerPromoCodeService : BannerPromoCodeApi {
             },
             failure = { Result.failure(it.exception) }
         )
-    }
-
-    private fun JSONObject.isStatusOk(): Boolean {
-        return getString("status").equals("OK", ignoreCase = false)
     }
 }

@@ -4,10 +4,11 @@ import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.InlineDataPart
 import com.github.kittinunf.fuel.json.responseJson
 import org.json.JSONException
-import org.json.JSONObject
 import ru.get4click.sdk.data.models.Email
+import ru.get4click.sdk.data.models.Get4ClickApiException
 import ru.get4click.sdk.data.models.GiftId
 import ru.get4click.sdk.data.models.wheel.WheelOfFortuneConfigData
+import ru.get4click.sdk.data.utlis.isStatusOk
 import ru.get4click.sdk.data.utlis.parseToWheelOfFortuneConfig
 
 internal class WheelOfFortuneService : WheelOfFortuneApi {
@@ -24,7 +25,7 @@ internal class WheelOfFortuneService : WheelOfFortuneApi {
                         val wheelConfig = jsonObj.parseToWheelOfFortuneConfig()
                         Result.success(wheelConfig)
                     } else {
-                        Result.failure(Exception(jsonObj.optString("error")))
+                        Result.failure(Get4ClickApiException(jsonObj.optString("error")))
                     }
                 } catch (e: JSONException) {
                     Result.failure(e)
@@ -42,11 +43,15 @@ internal class WheelOfFortuneService : WheelOfFortuneApi {
 
         return result.fold(
             success = { res ->
-                val jsonRes = res.obj()
-                if (jsonRes.isStatusOk()) {
-                    Result.success(Unit)
-                } else {
-                    Result.failure(Exception(jsonRes.optString("error")))
+                try {
+                    val jsonRes = res.obj()
+                    if (jsonRes.isStatusOk()) {
+                        Result.success(Unit)
+                    } else {
+                        Result.failure(Get4ClickApiException(jsonRes.optString("error")))
+                    }
+                } catch (e: JSONException) {
+                    Result.failure(e)
                 }
             },
             failure = { e -> Result.failure(e) }
@@ -62,11 +67,16 @@ internal class WheelOfFortuneService : WheelOfFortuneApi {
 
         return result.fold(
             success = { res ->
-                val jsonRes = res.obj()
-                if (jsonRes.isStatusOk()) {
-                    Result.success(GiftId(res.obj().optInt("gift_id")))
-                } else {
-                    Result.failure(Exception(jsonRes.optString("error")))
+                try {
+                    val jsonRes = res.obj()
+                    if (jsonRes.isStatusOk()) {
+                        val data = jsonRes.getJSONObject("data")
+                        Result.success(GiftId(data.optInt("gift_id")))
+                    } else {
+                        Result.failure(Get4ClickApiException(jsonRes.optString("error")))
+                    }
+                } catch (e: JSONException) {
+                    Result.failure(e)
                 }
             },
             failure = { e -> Result.failure(e) }
@@ -87,18 +97,18 @@ internal class WheelOfFortuneService : WheelOfFortuneApi {
 
         return result.fold(
             success = { res ->
-                val jsonRes = res.obj()
-                if (jsonRes.isStatusOk()) {
-                    Result.success(Unit)
-                } else {
-                    Result.failure(Exception(jsonRes.optString("error")))
+                try {
+                    val jsonRes = res.obj()
+                    if (jsonRes.isStatusOk()) {
+                        Result.success(Unit)
+                    } else {
+                        Result.failure(Get4ClickApiException(jsonRes.optString("error")))
+                    }
+                } catch (e: JSONException) {
+                    Result.failure(e)
                 }
             },
             failure = { e -> Result.failure(e) }
         )
-    }
-
-    private fun JSONObject.isStatusOk(): Boolean {
-        return getString("status").equals("OK", ignoreCase = false)
     }
 }

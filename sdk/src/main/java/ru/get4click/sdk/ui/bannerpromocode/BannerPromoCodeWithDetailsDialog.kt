@@ -55,6 +55,8 @@ internal class BannerPromoCodeWithDetailsDialog(
             textButtonBottom.setOnClickListener {
                 if (!isMainMode) {
                     showMain()
+                } else {
+                    dismiss()
                 }
             }
 
@@ -80,6 +82,12 @@ internal class BannerPromoCodeWithDetailsDialog(
 
             editTextPromoCode.setText(config.promoCode)
         }
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        isMainMode = true
+        showMain()
     }
 
     @SuppressLint("NotifyDataSetChanged")

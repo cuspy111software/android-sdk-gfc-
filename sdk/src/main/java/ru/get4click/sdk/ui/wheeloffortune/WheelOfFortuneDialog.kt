@@ -88,7 +88,7 @@ internal class WheelOfFortuneDialog(
                 ),
                 intArrayOf(buttonSpinColor, colorPrimaryDisabled, buttonSpinColor)
             ))
-            binding.buttonClose.backgroundTintList = ColorStateList.valueOf(buttonGiftColor)
+            binding.buttonClose.backgroundTintList = commonColorState
             binding.buttonClose.setTextColor(buttonTextColor)
             binding.layoutRoot.setBackgroundColor(modalBackgroundColor)
             binding.imageGiftLeft.imageTintList = ColorStateList.valueOf(leftGiftColor)
@@ -121,6 +121,11 @@ internal class WheelOfFortuneDialog(
                 val giftId = requestSpin()
                 if (giftId != null) {
                     requestMakeDistribution(giftId)
+                } else {
+                    giftReadinessState.value = giftReadinessState.value.copy(
+                        giftDistributionSucceed = true,
+                        giftId = GiftId(id = 0)
+                    )
                 }
             }
         }
@@ -165,10 +170,12 @@ internal class WheelOfFortuneDialog(
     }
 
     fun showError(errorText: String = context.getString(R.string.general_error_text)) {
+        binding.buttonSpin.isEnabled = false
+        binding.inputEmail.isEnabled = false
+        binding.checkBoxAgreement.isEnabled = false
+
         binding.textError.isInvisible = false
         binding.textError.text = errorText
-
-        updateSpinButton()
     }
 
     private fun updateSpinButton() {
