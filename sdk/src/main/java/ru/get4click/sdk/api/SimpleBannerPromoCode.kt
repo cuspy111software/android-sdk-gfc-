@@ -37,6 +37,7 @@ internal class SimpleBannerPromoCode(
                         limitations  = promoCodeModel.couponLimitations.ifEmpty { null },
                         restrictions = promoCodeModel.orderRestrictions.ifEmpty { null },
                         promoCode    = promoCodeModel.couponCode,
+                        logo         = promoCodeModel.logoUrl.ifEmpty { null },
                         staticConfig = config
                     )
                     promoCodeListener.onInit()

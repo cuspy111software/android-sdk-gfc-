@@ -22,42 +22,58 @@
             android:paddingVertical="@dimen/margin_xxsmall"
             android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:baselineAligned="false">
 
                 <FrameLayout
+                    android:id="@+id/layout_logo"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical">
-                    <TextView
-                        android:id="@+id/text_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_large"
-                        android:fontFamily="@font/averta_cy"
-                        tools:text="FINN FLARE"/>
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:layout_gravity="center_vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/layout_discount">
+                    <ImageView
+                        android:id="@+id/image_logo"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:scaleType="fitCenter"
+                        tools:ignore="ContentDescription" />
+
+                    <WebView
+                        android:id="@+id/webview_logo"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp" />
                 </FrameLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:id="@+id/layout_discount"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
                     android:paddingHorizontal="@dimen/margin_normal"
                     android:paddingVertical="@dimen/margin_tiny"
                     android:orientation="vertical"
-                    android:background="@drawable/discount_background">
+                    android:background="@drawable/discount_background"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintWidth_max="wrap"
+                    app:layout_constraintWidth_percent="0.4" >
+
                     <TextView
                         android:id="@+id/text_discount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:textColor="@android:color/white"
-                        android:textStyle="bold"
                         android:textSize="@dimen/banner_promo_code_title_text_size"
-                        tools:text="-10%"/>
+                        android:textStyle="bold"
+                        tools:text="-10%" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -69,7 +85,7 @@
                         android:letterSpacing="0.4"
                         android:text="@string/your_discount"/>
                 </LinearLayout>
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/text_description"

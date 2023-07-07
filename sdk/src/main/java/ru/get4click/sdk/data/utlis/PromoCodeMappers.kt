@@ -9,6 +9,7 @@ internal fun JSONObject.parseToModel(): PromoCodeApiModel {
         couponDescription = getString("couponDescription"),
         couponLimitations = getString("couponLimitations"),
         orderRestrictions = getString("orderRestrictions"),
-        couponCode        = getString("couponCode")
+        couponCode        = getString("couponCode"),
+        logoUrl           = optString("logo")
     )
 }
