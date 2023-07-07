@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="email">Электронная почта</string>
+    <string name="spin_wheel">Крутить барабан</string>
+    <string name="data_processing_agreement">Я согласен на обработку персональных данных</string>
+    <string name="close">Закрыть</string>
+    <string name="general_error_text">Сервис недоступен, попробуйте еще раз</string>
+</resources>

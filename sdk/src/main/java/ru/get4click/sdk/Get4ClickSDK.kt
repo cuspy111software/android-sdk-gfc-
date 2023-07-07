@@ -1,13 +1,22 @@
 package ru.get4click.sdk
 
+import androidx.activity.ComponentActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import ru.get4click.sdk.api.WheelOfFortune
+import ru.get4click.sdk.api.WheelOfFortuneImpl
+import ru.get4click.sdk.data.WheelOfFortuneService
 import ru.get4click.sdk.models.Banner
 import ru.get4click.sdk.models.Order
-import ru.get4click.sdk.view.BannerView
 
 object Get4ClickSDK {
-    
+
+    internal val TAG = "Get4Click"
+
     private var shopId = 0
     private var orderMap: MutableMap<String, Order> = HashMap<String, Order>()
+
+    private val sdkScope = CoroutineScope(SupervisorJob())
 
     fun getShopId(): Int {
         return shopId
@@ -61,4 +70,26 @@ object Get4ClickSDK {
         orderMap.put("current", Order())
     }
 
+    /**
+     * Creates an instance of [WheelOfFortune]
+     *
+     * @param activity the host activity
+     * @param apiKey client API key
+     * @param onInit callback triggered when the WOF is initialized
+     * @param onInitFailed callback triggered when WOF initialization failed
+     */
+    fun createWheelOfFortune(
+        activity: ComponentActivity,
+        apiKey: String,
+        onInit: (WheelOfFortune) -> Unit = { },
+        onInitFailed: (e: Throwable) -> Unit = { }
+    ): WheelOfFortune {
+        return WheelOfFortuneImpl(
+            activity          = activity,
+            apiKey            = apiKey,
+            wheelOfFortuneApi = WheelOfFortuneService(),
+            onInit            = onInit,
+            onInitFailed      = onInitFailed
+        )
+    }
 }
