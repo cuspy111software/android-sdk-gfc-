@@ -1,10 +1,14 @@
 package ru.get4click.sdk.api
 
 import android.util.Log
+import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import ru.get4click.sdk.R
 import ru.get4click.sdk.data.BannerPromoCodeApi
 import ru.get4click.sdk.models.BannerPromoCodeConfig
 import ru.get4click.sdk.models.BannerPromoCodeStaticConfig
@@ -24,6 +28,8 @@ internal class SimpleBannerPromoCode(
 
     private var bannerFullConfig: BannerPromoCodeConfig? = null
 
+    private var buttonPromoCode: ImageView? = null
+
     private val scope = activity.lifecycleScope
 
     init {
@@ -40,10 +46,14 @@ internal class SimpleBannerPromoCode(
                         logo         = promoCodeModel.logoUrl.ifEmpty { null },
                         staticConfig = config
                     )
-                    promoCodeListener.onInit()
+                    withContext(Dispatchers.Main) {
+                        promoCodeListener.onInit(this@SimpleBannerPromoCode)
+                    }
                 }.onFailure { e ->
                     Log.e(TAG, e.message ?: "")
-                    promoCodeListener.onInitFailed(e)
+                    withContext(Dispatchers.Main) {
+                        promoCodeListener.onInitFailed(e)
+                    }
                 }
         }
     }
@@ -60,6 +70,19 @@ internal class SimpleBannerPromoCode(
         }
 
         bannerDialog?.show()
+    }
+
+    override fun getButton(): ImageView {
+        return buttonPromoCode ?: ImageView(activity)
+            .apply {
+                val buttonSize = activity.resources
+                    .getDimension(R.dimen.default_image_button_size).toInt()
+
+                layoutParams = ViewGroup.LayoutParams(buttonSize, buttonSize)
+                setImageResource(R.drawable.ic_promo_code_button)
+
+                setOnClickListener { show() }
+            }.also { buttonPromoCode = it }
     }
 
     companion object {

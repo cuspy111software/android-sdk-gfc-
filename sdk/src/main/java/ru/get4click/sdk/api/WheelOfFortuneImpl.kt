@@ -1,6 +1,9 @@
 package ru.get4click.sdk.api
 
+import android.content.res.ColorStateList
 import android.util.Log
+import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +29,7 @@ internal class WheelOfFortuneImpl(
 
     private var wheelOfFortuneDialog: WheelOfFortuneDialog? = null
     private var wheelConfig: WheelOfFortuneFullConfig? = null
+    private var giftButton: ImageView? = null
 
     init {
         activity.lifecycleScope.launch(Dispatchers.IO) {
@@ -83,6 +87,26 @@ internal class WheelOfFortuneImpl(
                     }
                 }
         }
+    }
+
+    override fun getButton(): ImageView? {
+        val config = wheelConfig ?: return null
+
+        return giftButton ?: ImageView(activity)
+            .apply {
+                val buttonSize = activity.resources
+                    .getDimension(R.dimen.default_image_button_size).toInt()
+
+                layoutParams = ViewGroup.LayoutParams(buttonSize, buttonSize)
+
+                setImageResource(R.drawable.ic_button_gift)
+                setBackgroundResource(R.drawable.button_gift_background)
+                imageTintList = ColorStateList.valueOf(config.wofModalAppearance.buttonGiftColor)
+                backgroundTintList =
+                    ColorStateList.valueOf(config.wofModalAppearance.buttonGiftBackColor)
+
+                setOnClickListener { show() }
+            }.also { giftButton = it }
     }
 
     private suspend fun requestShow(config: WheelOfFortuneFullConfig) {
