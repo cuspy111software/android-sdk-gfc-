@@ -25,6 +25,7 @@
     <dimen name="edit_text_height">48dp</dimen>
     <dimen name="edit_text_horizontal_margin">42dp</dimen>
     <dimen name="button_primary_height">64dp</dimen>
+    <dimen name="default_image_button_size">64dp</dimen>
 
     <dimen name="card_corner_radius">10dp</dimen>
 

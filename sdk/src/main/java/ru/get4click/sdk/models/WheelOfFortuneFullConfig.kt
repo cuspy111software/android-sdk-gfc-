@@ -22,6 +22,7 @@ internal data class WofModalAppearance(
     @ColorInt val buttonSpinColor: Int,
     @ColorInt val buttonTextColor: Int,
     @ColorInt val buttonGiftColor: Int,
+    @ColorInt val buttonGiftBackColor: Int,
     @ColorInt val leftGiftColor: Int,
     @ColorInt val rightGiftColor: Int,
     @ColorInt val modalBackgroundColor: Int

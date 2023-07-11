@@ -25,6 +25,7 @@ internal fun WheelOfFortuneConfigData.toUiModel(): WheelOfFortuneFullConfig {
             buttonSpinColor      = Color.parseColor(buttonSpinWheelColor),
             buttonTextColor      = Color.parseColor(buttonTextColor),
             buttonGiftColor      = Color.parseColor(buttonSettings.buttonGiftColor),
+            buttonGiftBackColor  = Color.parseColor(buttonSettings.buttonGiftBackgroundColor),
             leftGiftColor        = Color.parseColor(giftLeftColor),
             rightGiftColor       = Color.parseColor(giftRightColor),
             modalBackgroundColor = Color.parseColor(backgroundModalColor),
