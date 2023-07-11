@@ -6,5 +6,6 @@ internal data class PromoCodeApiModel(
     val couponLimitations: String,
     val orderRestrictions: String,
     val couponCode: String,
+    val distributionId: Int,
     val logoUrl: String
 )

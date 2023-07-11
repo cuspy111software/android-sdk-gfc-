@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.activity.ComponentActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,6 +17,7 @@ import ru.get4click.sdk.ui.bannerpromocode.BannerPromoCodeDialog
 import ru.get4click.sdk.ui.bannerpromocode.BannerPromoCodeWithDetailsDialog
 import ru.get4click.sdk.ui.bannerpromocode.PromoCodeCreds
 import ru.get4click.sdk.ui.bannerpromocode.SimpleBannerPromoCodeDialog
+import ru.get4click.sdk.ui.wheeloffortune.BannerPromoCodeInteractor
 
 internal class SimpleBannerPromoCode(
     private val activity: ComponentActivity,
@@ -24,12 +26,14 @@ internal class SimpleBannerPromoCode(
     private val config: BannerPromoCodeStaticConfig,
     private val bannerPromoCodeApi: BannerPromoCodeApi,
     private val promoCodeListener: BannerPromoCodeListener
-) : BannerPromoCode {
+) : BannerPromoCode, BannerPromoCodeInteractor {
     private var bannerDialog: BannerPromoCodeDialog? = null
 
     private var bannerFullConfig: BannerPromoCodeConfig? = null
 
     private var buttonPromoCode: ImageView? = null
+
+    private var alreadyApplied = false
 
     private val scope = activity.lifecycleScope
 
@@ -38,14 +42,15 @@ internal class SimpleBannerPromoCode(
             bannerPromoCodeApi.getPromoCodeData(promoCodeCreds)
                 .onSuccess { promoCodeModel ->
                     bannerFullConfig = BannerPromoCodeConfig(
-                        title        = "",
-                        discountText = promoCodeModel.couponTitle,
-                        description  = promoCodeModel.couponDescription,
-                        limitations  = promoCodeModel.couponLimitations.ifEmpty { null },
-                        restrictions = promoCodeModel.orderRestrictions.ifEmpty { null },
-                        promoCode    = promoCodeModel.couponCode,
-                        logo         = promoCodeModel.logoUrl.ifEmpty { null },
-                        staticConfig = config
+                        title          = "",
+                        discountText   = promoCodeModel.couponTitle,
+                        description    = promoCodeModel.couponDescription,
+                        limitations    = promoCodeModel.couponLimitations.ifEmpty { null },
+                        restrictions   = promoCodeModel.orderRestrictions.ifEmpty { null },
+                        promoCode      = promoCodeModel.couponCode,
+                        distributionId = promoCodeModel.distributionId,
+                        logo           = promoCodeModel.logoUrl.ifEmpty { null },
+                        staticConfig   = config
                     )
                     withContext(Dispatchers.Main) {
                         promoCodeListener.onInit(this@SimpleBannerPromoCode)
@@ -60,12 +65,23 @@ internal class SimpleBannerPromoCode(
     }
 
     override fun show() {
+        if (alreadyApplied) return
+
         if (bannerDialog == null) {
             bannerFullConfig?.let { config ->
                 bannerDialog = when (viewType) {
-                    BannerPromoCodeViewType.Simple -> SimpleBannerPromoCodeDialog(activity, config)
+                    BannerPromoCodeViewType.Simple ->
+                        SimpleBannerPromoCodeDialog(
+                            context                = activity,
+                            bannerDialogInteractor = this,
+                            config                 = config
+                        )
                     BannerPromoCodeViewType.Expandable ->
-                        BannerPromoCodeWithDetailsDialog(activity, config)
+                        BannerPromoCodeWithDetailsDialog(
+                            context                = activity,
+                            bannerDialogInteractor = this,
+                            config                 = config
+                        )
                 }
             }
         }
@@ -73,7 +89,9 @@ internal class SimpleBannerPromoCode(
         bannerDialog?.show()
     }
 
-    override fun getButton(): ImageView {
+    override fun getButton(): ImageView? {
+        if (alreadyApplied || bannerFullConfig == null) return null
+
         return buttonPromoCode ?: ImageView(activity)
             .apply {
                 val buttonSize = activity.resources
@@ -84,6 +102,17 @@ internal class SimpleBannerPromoCode(
 
                 setOnClickListener { show() }
             }.also { buttonPromoCode = it }
+    }
+
+    override fun promoCodeAlreadyUsed() {
+        val distributionId = bannerFullConfig?.distributionId ?: return
+
+        bannerDialog?.dismiss()
+        buttonPromoCode?.isVisible = false
+        scope.launch(Dispatchers.IO) {
+            bannerPromoCodeApi.promoCodeIsAlreadyUsed(promoCodeCreds, distributionId)
+                .onFailure { Log.e(TAG, "Failed to send \"Promo Code is already used\"") }
+        }
     }
 
     companion object {

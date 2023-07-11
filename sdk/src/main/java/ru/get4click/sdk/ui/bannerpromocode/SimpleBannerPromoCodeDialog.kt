@@ -15,14 +15,16 @@ import kotlinx.coroutines.withContext
 import ru.get4click.sdk.R
 import ru.get4click.sdk.databinding.PromoCodeBannerLayoutBinding
 import ru.get4click.sdk.models.BannerPromoCodeConfig
+import ru.get4click.sdk.ui.wheeloffortune.BannerPromoCodeInteractor
 import ru.get4click.sdk.utils.Image
 import ru.get4click.sdk.utils.ImageDownloader
 import ru.get4click.sdk.utils.copyTextToClipboard
 
 internal class SimpleBannerPromoCodeDialog(
     context: Context,
+    bannerDialogInteractor: BannerPromoCodeInteractor,
     private val config: BannerPromoCodeConfig
-) : BannerPromoCodeDialog(context) {
+) : BannerPromoCodeDialog(context, bannerDialogInteractor) {
     private lateinit var binding: PromoCodeBannerLayoutBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +60,9 @@ internal class SimpleBannerPromoCodeDialog(
                     .show()
             }
 
-            textButtonBottom.setOnClickListener { dismiss() }
+            textButtonBottom.setOnClickListener {
+                bannerDialogInteractor.promoCodeAlreadyUsed()
+            }
 
             dialogScope.launch(Dispatchers.IO) {
                 if (config.logo != null) {
