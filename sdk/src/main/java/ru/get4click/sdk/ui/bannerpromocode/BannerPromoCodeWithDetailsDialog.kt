@@ -112,6 +112,10 @@ internal class BannerPromoCodeWithDetailsDialog(
         super.onAttachedToWindow()
         isMainMode = true
         showMain()
+
+        if (detailsDescription.size <= 1) {
+            binding.textButtonMore.isVisible = false
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

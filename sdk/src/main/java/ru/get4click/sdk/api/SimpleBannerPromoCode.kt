@@ -20,6 +20,7 @@ import ru.get4click.sdk.ui.bannerpromocode.SimpleBannerPromoCodeDialog
 internal class SimpleBannerPromoCode(
     private val activity: ComponentActivity,
     private val promoCodeCreds: PromoCodeCreds,
+    private val viewType: BannerPromoCodeViewType,
     private val config: BannerPromoCodeStaticConfig,
     private val bannerPromoCodeApi: BannerPromoCodeApi,
     private val promoCodeListener: BannerPromoCodeListener
@@ -61,10 +62,10 @@ internal class SimpleBannerPromoCode(
     override fun show() {
         if (bannerDialog == null) {
             bannerFullConfig?.let { config ->
-                bannerDialog = if (config.limitations == null && config.restrictions == null) {
-                    SimpleBannerPromoCodeDialog(activity, config)
-                } else {
-                    BannerPromoCodeWithDetailsDialog(activity, config)
+                bannerDialog = when (viewType) {
+                    BannerPromoCodeViewType.Simple -> SimpleBannerPromoCodeDialog(activity, config)
+                    BannerPromoCodeViewType.Expandable ->
+                        BannerPromoCodeWithDetailsDialog(activity, config)
                 }
             }
         }
