@@ -36,7 +36,7 @@ internal class SimpleBannerPromoCodeDialog(
 
         with(binding) {
             textDiscount.text = config.discountText
-            textDescription.text = config.description
+            textDescription.text = buildDescriptionString(config)
             textPromoCodeTitle.text = config.staticConfig.promoCodeTitle
                 ?: context.getString(R.string.your_promo_code)
 
@@ -90,6 +90,24 @@ internal class SimpleBannerPromoCodeDialog(
         val percentWidth = rect.width() * percent
 
         window?.setLayout(percentWidth.toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
+    }
+
+    private fun buildDescriptionString(config: BannerPromoCodeConfig): String {
+        return buildString {
+            append(config.description)
+
+            config.limitations?.let { limitations ->
+                appendLine()
+                appendLine()
+                append(limitations)
+            }
+
+            config.restrictions?.let { restrictions ->
+                appendLine()
+                appendLine()
+                append(restrictions)
+            }
+        }
     }
 
     companion object {

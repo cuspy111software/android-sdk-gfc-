@@ -114,6 +114,7 @@ object Get4ClickSDK {
      * @param activity
      * @param apiKey client's API Key
      * @param email user email
+     * @param viewType defines what type of banner view to use
      * @param config configure promo code banner view
      * @param promoCodeListener listens for Banner Promo Code events
      */
@@ -121,6 +122,7 @@ object Get4ClickSDK {
         activity: ComponentActivity,
         apiKey: String,
         email: String,
+        viewType: BannerPromoCodeViewType = BannerPromoCodeViewType.Simple,
         config: BannerPromoCodeStaticConfig = BannerPromoCodeStaticConfig(),
         promoCodeListener: BannerPromoCodeListener = object : BannerPromoCodeListener { }
     ): BannerPromoCode {
@@ -130,6 +132,7 @@ object Get4ClickSDK {
             activity           = activity,
             promoCodeCreds     = PromoCodeCreds(Email(email), apiKey),
             config             = config,
+            viewType           = viewType,
             bannerPromoCodeApi = BannerPromoCodeService(),
             promoCodeListener  = promoCodeListener
         )
