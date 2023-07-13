@@ -18,14 +18,16 @@ import ru.get4click.sdk.databinding.PromoCodeBannerWithDescrLayoutBinding
 import ru.get4click.sdk.models.BannerPromoCodeConfig
 import ru.get4click.sdk.models.ItemDescriptionText
 import ru.get4click.sdk.models.ItemDescriptionTextStyle
+import ru.get4click.sdk.ui.wheeloffortune.BannerPromoCodeInteractor
 import ru.get4click.sdk.utils.Image
 import ru.get4click.sdk.utils.ImageDownloader
 import ru.get4click.sdk.utils.copyTextToClipboard
 
 internal class BannerPromoCodeWithDetailsDialog(
     context: Context,
+    bannerDialogInteractor: BannerPromoCodeInteractor,
     private val config: BannerPromoCodeConfig
-) : BannerPromoCodeDialog(context) {
+) : BannerPromoCodeDialog(context, bannerDialogInteractor) {
     private lateinit var binding: PromoCodeBannerWithDescrLayoutBinding
 
     private lateinit var adapter: DescriptionAdapter
@@ -61,7 +63,7 @@ internal class BannerPromoCodeWithDetailsDialog(
                 if (!isMainMode) {
                     showMain()
                 } else {
-                    dismiss()
+                    bannerDialogInteractor.promoCodeAlreadyUsed()
                 }
             }
 

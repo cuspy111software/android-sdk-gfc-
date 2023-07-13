@@ -9,5 +9,5 @@ interface BannerPromoCode {
      * Returns [ImageView] button that can be used to show Promo Code Banner. Returns null if
      * the banner is not initialized yet
      */
-    fun getButton(): ImageView
+    fun getButton(): ImageView?
 }

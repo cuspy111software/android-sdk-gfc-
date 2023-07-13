@@ -1,6 +1,7 @@
 package ru.get4click.sdk.data
 
 import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.InlineDataPart
 import com.github.kittinunf.fuel.json.responseJson
 import org.json.JSONException
 import ru.get4click.sdk.data.models.Get4ClickApiException
@@ -33,6 +34,29 @@ internal class BannerPromoCodeService : BannerPromoCodeApi {
                 }
             },
             failure = { Result.failure(it.exception) }
+        )
+    }
+
+    override suspend fun promoCodeIsAlreadyUsed(
+        promoCodeCreds: PromoCodeCreds,
+        couponCodeDistributionId: Int
+    ): Result<Unit> {
+        val (_, _, result) = Fuel
+            .upload("https://staging.get4click.ru/api/${promoCodeCreds.apiKey}/coupon-code/used")
+            .add(InlineDataPart(promoCodeCreds.email.value, "email"))
+            .add(InlineDataPart(couponCodeDistributionId.toString(), "distributionId"))
+            .responseJson()
+
+        return result.fold(
+            success = { responseData ->
+                val jsonResp = responseData.obj()
+                if (jsonResp.isStatusOk()) {
+                    Result.success(Unit)
+                } else {
+                    Result.failure(Get4ClickApiException(jsonResp.optString("error")))
+                }
+            },
+            failure = { e -> Result.failure(e.exception) }
         )
     }
 }
