@@ -17,36 +17,24 @@ plugins {
 group = 'ru.get4click'
 version = '1.1.2'
 
-
- /*  publishing {
-       singleVariant('release') {
-           withSourcesJar()
-       }*/
-
-  /*     release(MavenPublication) {
-               groupId = 'ru.get4click'
-               artifactId = 'sdk'
-               version = '1.0-SNAPSHOT'
-
-               afterEvaluate {
-                   from components.release
-               }
-       }*/
- //  }
-
 publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'ru.get4click'
+            artifactId = 'sdk'
+            version = '1.2.0'
 
-     publications {
-          release(MavenPublication) {
-              groupId = 'ru.get4click'
-              artifactId = 'sdk'
-              version = '1.1.2'
-
-              afterEvaluate {
-                  from components.release
-              }
-          }
-      }
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = 'myrepo'
+            url = "${project.buildDir}/repo"
+        }
+    }
 }
 
 android {
@@ -86,6 +74,10 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    packagingOptions {
+        pickFirst 'kotlinx/coroutines/*'
+    }
 }
 
 dependencies {
@@ -105,4 +97,11 @@ dependencies {
     implementation 'com.github.kittinunf.fuel:fuel:2.3.1'
     implementation 'com.github.kittinunf.fuel:fuel-coroutines:2.3.1'
     implementation 'com.github.kittinunf.fuel:fuel-json:2.3.1'
+}
+
+tasks.register('generateRepo', Zip) {
+    def publishTask = tasks.named('publishReleasePublicationToMyrepoRepository')
+    from publishTask.map { it.getRepository().getUrl() }
+    into 'mylibrary'
+    archiveFileName.set('mylibrary.zip')
 }

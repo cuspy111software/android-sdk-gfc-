@@ -17,6 +17,11 @@
         android:layout_height="wrap_content"
         android:text="Wheel Of Fortune"/>
 
+    <FrameLayout
+        android:id="@+id/banner_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <Button
         android:id="@+id/button_cross_mail"
         android:layout_width="match_parent"

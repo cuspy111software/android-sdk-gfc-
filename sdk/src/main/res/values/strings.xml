@@ -13,4 +13,5 @@
     <string name="your_promo_code">Ваш промокод</string>
     <string name="promo_code_saved_to_clipboard">Промокод скопирован в буфер</string>
     <string name="go_back"><u>Вернуться назад</u></string>
+    <string name="more_detailed"><u>Подробнее</u></string>
 </resources>

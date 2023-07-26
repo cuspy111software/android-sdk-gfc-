@@ -10,6 +10,7 @@ import ru.get4click.sdk.data.BannerPromoCodeService
 import ru.get4click.sdk.data.CrossMailService
 import ru.get4click.sdk.data.WheelOfFortuneService
 import ru.get4click.sdk.api.BannerPromoCode
+import ru.get4click.sdk.data.PreCheckoutService
 import ru.get4click.sdk.data.models.Email
 import ru.get4click.sdk.models.Banner
 import ru.get4click.sdk.models.BannerPromoCodeStaticConfig
@@ -41,9 +42,10 @@ object Get4ClickSDK {
     }
 
 
-    private  fun intSDKErrors(){
+    private fun intSDKErrors() {
         shopIdError()
     }
+
     private fun shopIdError() {
         if (getShopId() == 0) {
             throw IllegalArgumentException("You have to set shopId first in initSDK() method")
@@ -51,8 +53,7 @@ object Get4ClickSDK {
     }
 
 
-
-    fun getBannerWithCurrentOrder(bannerId : Int) : Banner{
+    fun getBannerWithCurrentOrder(bannerId: Int): Banner {
         intSDKErrors()
         return Banner(bannerId, getCurrentOrder())
     }
@@ -92,18 +93,18 @@ object Get4ClickSDK {
      * Creates an instance of [WheelOfFortune]
      *
      * @param activity the host activity
-     * @param apiKey client API key
+     * @param apiKey user's API key
      * @param wheelOfFortuneListener listens for WOF events
      */
     fun createWheelOfFortune(
         activity: ComponentActivity,
         apiKey: String,
-        wheelOfFortuneListener: WheelOfFortuneListener = object : WheelOfFortuneListener { }
+        wheelOfFortuneListener: WheelOfFortuneListener = object : WheelOfFortuneListener {}
     ): WheelOfFortune {
         return WheelOfFortuneImpl(
-            activity               = activity,
-            apiKey                 = apiKey,
-            wheelOfFortuneApi      = WheelOfFortuneService(),
+            activity = activity,
+            apiKey = apiKey,
+            wheelOfFortuneApi = WheelOfFortuneService(),
             wheelOfFortuneListener = wheelOfFortuneListener
         )
     }
@@ -112,7 +113,7 @@ object Get4ClickSDK {
      * Creates an instance of simple implementation of [BannerPromoCode]
      *
      * @param activity
-     * @param apiKey client's API Key
+     * @param apiKey user's API Key
      * @param email user email
      * @param viewType defines what type of banner view to use
      * @param config configure promo code banner view
@@ -124,17 +125,39 @@ object Get4ClickSDK {
         email: String,
         viewType: BannerPromoCodeViewType = BannerPromoCodeViewType.Simple,
         config: BannerPromoCodeStaticConfig = BannerPromoCodeStaticConfig(),
-        promoCodeListener: BannerPromoCodeListener = object : BannerPromoCodeListener { }
+        promoCodeListener: BannerPromoCodeListener = object : BannerPromoCodeListener {}
     ): BannerPromoCode {
         require(email.isEmail()) { "[email] is not correct" }
 
         return SimpleBannerPromoCode(
-            activity           = activity,
-            promoCodeCreds     = PromoCodeCreds(Email(email), apiKey),
-            config             = config,
-            viewType           = viewType,
+            activity = activity,
+            promoCodeCreds = PromoCodeCreds(Email(email), apiKey),
+            config = config,
+            viewType = viewType,
             bannerPromoCodeApi = BannerPromoCodeService(),
-            promoCodeListener  = promoCodeListener
+            promoCodeListener = promoCodeListener
+        )
+    }
+
+    /**
+     * Creates an instance of [PreCheckoutBanner]
+     *
+     * @param activity host activity
+     * @param apiKey user's API Key
+     * @param shopId user's shop id
+     */
+    fun createPreCheckoutBanner(
+        activity: ComponentActivity,
+        apiKey: String,
+        shopId: Int,
+        preCheckoutListener: PreCheckoutListener = object : PreCheckoutListener { }
+    ): PreCheckoutBanner {
+        return PreCheckoutBannerImpl(
+            activity = activity,
+            apiKey = apiKey,
+            shopId = shopId,
+            preCheckoutApi = PreCheckoutService(),
+            preCheckoutListener = preCheckoutListener
         )
     }
 }
