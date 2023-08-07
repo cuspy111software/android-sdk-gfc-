@@ -5,6 +5,7 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import ru.get4click.sdk.data.models.precheckout.PreCheckoutItemData
 import ru.get4click.sdk.data.models.precheckout.PreCheckoutApiModel
+import ru.get4click.sdk.data.models.precheckout.PreCheckoutCloseApiModel
 
 internal fun JSONObject.parseToModelPreCheckout(): PreCheckoutApiModel {
     val data = this.getJSONObject("data")
@@ -29,5 +30,13 @@ internal fun JSONObject.parseToModelPreCheckout(): PreCheckoutApiModel {
         widgetId    = data.getInt("widget_id"),
         base_colour = data.getString("base_colour"),
         messages    = items
+    )
+}
+
+internal fun JSONObject.parseToModelClosePreCheckout(): PreCheckoutCloseApiModel {
+    return PreCheckoutCloseApiModel(
+        data    = getString("data"),
+        status = getString("status"),
+        error = getString("error")
     )
 }

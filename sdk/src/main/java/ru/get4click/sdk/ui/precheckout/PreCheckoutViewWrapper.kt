@@ -13,26 +13,30 @@ import ru.get4click.sdk.models.PreCheckoutModel
 internal class PreCheckoutViewWrapper(
     viewGroup: ViewGroup,
     content: PreCheckoutView,
-    context: Context
+    context: Context,
+    onCloseClicked: () -> Unit,
 ) : BaseTransientBottomBar<PreCheckoutViewWrapper>(context, viewGroup, content, content) {
 
     init {
         view.setBackgroundColor(ContextCompat.getColor(view.context, android.R.color.transparent))
         view.setPadding(0, 0, 0, 0)
-        content.onCloseClicked = { dismiss() }
+        content.onCloseClicked = {
+            dismiss()
+            onCloseClicked.invoke()
+        }
     }
 
     companion object {
         private const val DEFAULT_BOTTOM_PADDING = 120
 
-        fun make(view: View, preCheckoutModel: PreCheckoutModel): PreCheckoutViewWrapper {
+        fun make(view: View, preCheckoutModel: PreCheckoutModel, onCloseClicked: () -> Unit): PreCheckoutViewWrapper {
             val parent = view.findSuitableParent() ?: throw IllegalArgumentException(
                 "No suitable parent found from the given view. Please provide a valid view."
             )
 
             val customView = PreCheckoutView(view.context, preCheckoutModel)
 
-            return PreCheckoutViewWrapper(parent, customView, view.context).apply {
+            return PreCheckoutViewWrapper(parent, customView, view.context, onCloseClicked).apply {
                 duration = LENGTH_INDEFINITE
                 val layout = this.view as Snackbar.SnackbarLayout
                 layout.setPadding(0, 0, 0, DEFAULT_BOTTOM_PADDING)

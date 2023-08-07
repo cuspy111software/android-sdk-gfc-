@@ -25,8 +25,7 @@ internal class PreCheckoutBannerImpl(
 
     init {
         scope.launch(Dispatchers.IO) {
-            preCheckoutApi.getPreCheckoutData(apiKey, shopId)
-                .onSuccess { preCheckoutModel ->
+            preCheckoutApi.getPreCheckoutData(apiKey, shopId).onSuccess { preCheckoutModel ->
                     this@PreCheckoutBannerImpl.preCheckoutModel = PreCheckoutModel(
                         widgetId = preCheckoutModel.widgetId,
                         baseColor = preCheckoutModel.base_colour,
@@ -35,8 +34,10 @@ internal class PreCheckoutBannerImpl(
                     withContext(Dispatchers.Main) {
                         preCheckoutListener.onInit()
                         this@PreCheckoutBannerImpl.preCheckoutModel?.let { data ->
-                            preCheckoutViewWrapper = PreCheckoutViewWrapper
-                                .make(activity.window.decorView.rootView, data)
+                            preCheckoutViewWrapper = PreCheckoutViewWrapper.make(
+                                    activity.window.decorView.rootView,
+                                    data
+                                ) { close() }
                             preCheckoutViewWrapper?.show()
                         }
                     }
@@ -47,11 +48,22 @@ internal class PreCheckoutBannerImpl(
         }
     }
 
+    private fun close() {
+        scope.launch(Dispatchers.IO) {
+            preCheckoutApi.sendNotifyClose(
+                apiKey, preCheckoutModel?.widgetId ?: 1, ACTION_CLOSE
+            ).onSuccess {
+                preCheckoutListener.onClose()
+            }.onFailure { /* no-op */ }
+        }
+    }
+
     override fun show() {
         preCheckoutViewWrapper?.show()
     }
 
     companion object {
         private const val TAG = "Precheckout"
+        private const val ACTION_CLOSE = "close"
     }
 }
