@@ -27,9 +27,11 @@ internal fun JSONObject.parseToModelPreCheckout(): PreCheckoutApiModel {
     }
 
     return PreCheckoutApiModel(
+        hiding_time = data.getLong("hiding_time"),
         widgetId    = data.getInt("widget_id"),
         base_colour = data.getString("base_colour"),
-        messages    = items
+        messages    = items,
+        session_id = data.getString("session_id")
     )
 }
 
@@ -37,6 +39,5 @@ internal fun JSONObject.parseToModelClosePreCheckout(): PreCheckoutCloseApiModel
     return PreCheckoutCloseApiModel(
         data    = getString("data"),
         status = getString("status"),
-        error = getString("error")
     )
 }

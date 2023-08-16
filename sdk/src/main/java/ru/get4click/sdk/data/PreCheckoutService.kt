@@ -13,23 +13,17 @@ import ru.get4click.sdk.data.utlis.parseToModelPreCheckout
 internal class PreCheckoutService : PreCheckoutApi {
     override suspend fun getPreCheckoutData(
         apiKey: String,
-        shopId: Int
     ): Result<PreCheckoutApiModel> {
         val (_, _, result) = Fuel
-            .get("https://get4click.ru/api/$apiKey/precheckout/init/")
-            .apply {
-                parameters = listOf(
-                    "is_mobile" to 1,
-                    "page_url" to "https://test.get4click.ru/",
-                    "shop_id" to shopId
-                )
-            }
+            .get("https://staging.get4click.ru/api/$apiKey/precheckout/mobile-init/")
+            .apply{}
             .responseJson()
 
         return result.fold(
             success = { data ->
                 try {
                     val jsonObj = data.obj()
+                    println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ$jsonObj")
                     if (jsonObj.isStatusOk()) {
                         val preCheckoutApiModel = jsonObj.parseToModelPreCheckout()
                         Result.success(preCheckoutApiModel)
@@ -47,14 +41,16 @@ internal class PreCheckoutService : PreCheckoutApi {
     override suspend fun sendNotifyClose(
         apiKey: String,
         widgetId: Int,
-        userAction: String
+        sessionId: String,
+        userAction: String,
     ): Result<PreCheckoutCloseApiModel> {
         val (_, _, result) = Fuel
-            .post("https://staging.get4click.ru/api/$apiKey/precheckout/action/")
+            .post("https://staging.get4click.ru/api/$apiKey/precheckout/mobile-action/")
             .apply {
                 parameters = listOf(
                     "user_action" to userAction,
-                    "widget_id" to widgetId
+                    "widget_id" to widgetId,
+                    "session_id" to sessionId
                 )
             }
             .responseJson()

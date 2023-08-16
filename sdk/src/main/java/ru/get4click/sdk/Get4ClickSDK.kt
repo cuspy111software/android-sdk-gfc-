@@ -149,13 +149,11 @@ object Get4ClickSDK {
     fun createPreCheckoutBanner(
         activity: ComponentActivity,
         apiKey: String,
-        shopId: Int,
         preCheckoutListener: PreCheckoutListener = object : PreCheckoutListener { }
     ): PreCheckoutBanner {
         return PreCheckoutBannerImpl(
             activity = activity,
             apiKey = apiKey,
-            shopId = shopId,
             preCheckoutApi = PreCheckoutService(),
             preCheckoutListener = preCheckoutListener
         )
