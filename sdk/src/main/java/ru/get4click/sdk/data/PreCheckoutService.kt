@@ -16,14 +16,12 @@ internal class PreCheckoutService : PreCheckoutApi {
     ): Result<PreCheckoutApiModel> {
         val (_, _, result) = Fuel
             .get("https://staging.get4click.ru/api/$apiKey/precheckout/mobile-init/")
-            .apply{}
             .responseJson()
 
         return result.fold(
             success = { data ->
                 try {
                     val jsonObj = data.obj()
-                    println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ$jsonObj")
                     if (jsonObj.isStatusOk()) {
                         val preCheckoutApiModel = jsonObj.parseToModelPreCheckout()
                         Result.success(preCheckoutApiModel)

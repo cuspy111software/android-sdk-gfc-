@@ -28,10 +28,10 @@ internal class PreCheckoutBannerImpl(
             preCheckoutApi.getPreCheckoutData(apiKey).onSuccess { preCheckoutModel ->
                 this@PreCheckoutBannerImpl.preCheckoutModel = PreCheckoutModel(
                     widgetId = preCheckoutModel.widgetId,
-                    baseColor = preCheckoutModel.base_colour,
+                    baseColor = preCheckoutModel.baseColour,
                     messages = preCheckoutModel.messages,
-                    hiding_time = preCheckoutModel.hiding_time * ONE_SECOND_IN_MILLISECOND,
-                    sessionId = preCheckoutModel.session_id
+                    hiding_time = preCheckoutModel.hidingTime * ONE_SECOND_IN_MILLISECONDS,
+                    sessionId = preCheckoutModel.sessionId
                 )
                 withContext(Dispatchers.Main) {
                     preCheckoutListener.onInit()
@@ -52,14 +52,15 @@ internal class PreCheckoutBannerImpl(
 
     private fun close() {
         scope.launch(Dispatchers.IO) {
-            preCheckoutApi.sendNotifyClose(
-                apiKey,
-                preCheckoutModel?.widgetId ?: 1,
-                preCheckoutModel?.sessionId ?: "",
-                ACTION_CLOSE
-            ).onSuccess { /* no-op */}.onFailure { /* no-op */ }
+            if (preCheckoutModel != null)
+                preCheckoutApi.sendNotifyClose(
+                    apiKey,
+                    preCheckoutModel?.widgetId ?: 1,
+                    preCheckoutModel?.sessionId ?: "",
+                    ACTION_CLOSE
+                ).onSuccess { /* no-op */ }.onFailure { Log.e(REQUEST_FOR_CLOSE, ERROR_MESSAGE) }
             withContext(Dispatchers.Main) {
-                restartShowWidget(preCheckoutModel?.hiding_time ?: ONE_SECOND_IN_MILLISECOND)
+                restartShowWidget(preCheckoutModel?.hiding_time ?: ONE_SECOND_IN_MILLISECONDS)
             }
         }
     }
@@ -76,6 +77,8 @@ internal class PreCheckoutBannerImpl(
     companion object {
         private const val TAG = "Precheckout"
         private const val ACTION_CLOSE = "close"
-        private const val ONE_SECOND_IN_MILLISECOND: Long = 1000
+        private const val ONE_SECOND_IN_MILLISECONDS: Long = 1000
+        private const val REQUEST_FOR_CLOSE = "request for close"
+        private const val ERROR_MESSAGE = "the request has not been sent"
     }
 }
