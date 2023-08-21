@@ -4,6 +4,7 @@ import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.InlineDataPart
 import com.github.kittinunf.fuel.json.responseJson
 import org.json.JSONException
+import ru.get4click.sdk.BuildConfig
 import ru.get4click.sdk.data.models.Get4ClickApiException
 import ru.get4click.sdk.data.models.promocode.PromoCodeApiModel
 import ru.get4click.sdk.data.utlis.isStatusOk
@@ -15,7 +16,7 @@ internal class BannerPromoCodeService : BannerPromoCodeApi {
         promoCodeCreds: PromoCodeCreds
     ): Result<PromoCodeApiModel> {
         val (_, _, result) = Fuel
-            .get("https://staging.get4click.ru/api/${promoCodeCreds.apiKey}/coupon-code/active")
+            .get("${BuildConfig.BASE_API_URL}${promoCodeCreds.apiKey}/coupon-code/active")
             .apply { parameters = listOf("email" to promoCodeCreds.email.value) }
             .responseJson()
 
@@ -42,7 +43,7 @@ internal class BannerPromoCodeService : BannerPromoCodeApi {
         couponCodeDistributionId: Int
     ): Result<Unit> {
         val (_, _, result) = Fuel
-            .upload("https://staging.get4click.ru/api/${promoCodeCreds.apiKey}/coupon-code/used")
+            .upload("${BuildConfig.BASE_API_URL}${promoCodeCreds.apiKey}/coupon-code/used")
             .add(InlineDataPart(promoCodeCreds.email.value, "email"))
             .add(InlineDataPart(couponCodeDistributionId.toString(), "distributionId"))
             .responseJson()

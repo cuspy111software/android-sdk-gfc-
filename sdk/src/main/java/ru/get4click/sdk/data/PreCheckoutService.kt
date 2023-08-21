@@ -3,6 +3,7 @@ package ru.get4click.sdk.data
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.json.responseJson
 import org.json.JSONException
+import ru.get4click.sdk.BuildConfig
 import ru.get4click.sdk.data.models.Get4ClickApiException
 import ru.get4click.sdk.data.models.precheckout.PreCheckoutApiModel
 import ru.get4click.sdk.data.models.precheckout.PreCheckoutCloseApiModel
@@ -15,7 +16,7 @@ internal class PreCheckoutService : PreCheckoutApi {
         apiKey: String,
     ): Result<PreCheckoutApiModel> {
         val (_, _, result) = Fuel
-            .get("https://staging.get4click.ru/api/$apiKey/precheckout/mobile-init/")
+            .get("${BuildConfig.BASE_API_URL}$apiKey/precheckout/mobile-init/")
             .responseJson()
 
         return result.fold(
@@ -43,7 +44,7 @@ internal class PreCheckoutService : PreCheckoutApi {
         userAction: String,
     ): Result<PreCheckoutCloseApiModel> {
         val (_, _, result) = Fuel
-            .post("https://staging.get4click.ru/api/$apiKey/precheckout/mobile-action/")
+            .post("${BuildConfig.BASE_API_URL}$apiKey/precheckout/mobile-action/")
             .apply {
                 parameters = listOf(
                     "user_action" to userAction,
