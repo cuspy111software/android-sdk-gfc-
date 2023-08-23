@@ -21,7 +21,7 @@ repositories {
 
 ```groovy
 dependencies {
-    implementation 'com.github.getforclick:Android-SDK:1.1.2'
+    implementation 'com.github.cuspy111software:android-sdk-gfc-:1.1.2'
 }
 ```
 
