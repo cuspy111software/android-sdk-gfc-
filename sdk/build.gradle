@@ -58,12 +58,12 @@ android {
     buildTypes {
         def BASE_API_URL = "BASE_API_URL"
         debug {
-            buildConfigField "String", BASE_API_URL, "\"https://staging.get4click.ru/api/\""
+            buildConfigField "String", BASE_API_URL, "\"https://get4click.ru/api/\""
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", BASE_API_URL, "\"https://staging.get4click.ru/api/\""
+            buildConfigField "String", BASE_API_URL, "\"https://get4click.ru/api/\""
         }
     }
     compileOptions {
