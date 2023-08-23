@@ -4,6 +4,7 @@ import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.InlineDataPart
 import com.github.kittinunf.fuel.json.responseJson
 import org.json.JSONException
+import ru.get4click.sdk.BuildConfig
 import ru.get4click.sdk.data.models.Email
 import ru.get4click.sdk.data.models.Get4ClickApiException
 import ru.get4click.sdk.data.models.GiftId
@@ -14,7 +15,7 @@ import ru.get4click.sdk.data.utlis.parseToWheelOfFortuneConfig
 internal class WheelOfFortuneService : WheelOfFortuneApi {
     override suspend fun init(apiKey: String): Result<WheelOfFortuneConfigData> {
         val (_, _, result) = Fuel
-            .get("https://staging.get4click.ru/api/$apiKey/wheel-of-fortune/init/")
+            .get("${BuildConfig.BASE_API_URL}$apiKey/wheel-of-fortune/init/")
             .responseJson()
 
         return result.fold(
@@ -37,7 +38,7 @@ internal class WheelOfFortuneService : WheelOfFortuneApi {
 
     override suspend fun show(token: String): Result<Unit> {
         val (_, _, result) = Fuel
-            .upload("https://staging.get4click.ru/api/wheel-of-fortune/show/")
+            .upload("${BuildConfig.BASE_API_URL}wheel-of-fortune/show/")
             .add(InlineDataPart(token, "token"))
             .responseJson()
 
@@ -60,7 +61,7 @@ internal class WheelOfFortuneService : WheelOfFortuneApi {
 
     override suspend fun roll(token: String): Result<GiftId> {
         val (_, _, result) = Fuel
-            .upload("https://staging.get4click.ru/api/wheel-of-fortune/roll/")
+            .upload("${BuildConfig.BASE_API_URL}wheel-of-fortune/roll/")
             .add(InlineDataPart(token, "token"))
             .responseJson()
 
@@ -89,7 +90,7 @@ internal class WheelOfFortuneService : WheelOfFortuneApi {
         email: Email
     ): Result<Unit> {
         val (_, _, result) = Fuel
-            .upload("https://staging.get4click.ru/api/wheel-of-fortune/make-distribution/")
+            .upload("${BuildConfig.BASE_API_URL}wheel-of-fortune/make-distribution/")
             .add(InlineDataPart(token, "token"))
             .add(InlineDataPart(giftId.id.toString(), "gift_id"))
             .add(InlineDataPart(email.value, "email"))

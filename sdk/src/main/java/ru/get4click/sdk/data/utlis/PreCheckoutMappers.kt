@@ -5,6 +5,7 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import ru.get4click.sdk.data.models.precheckout.PreCheckoutItemData
 import ru.get4click.sdk.data.models.precheckout.PreCheckoutApiModel
+import ru.get4click.sdk.data.models.precheckout.PreCheckoutCloseApiModel
 
 internal fun JSONObject.parseToModelPreCheckout(): PreCheckoutApiModel {
     val data = this.getJSONObject("data")
@@ -15,19 +16,28 @@ internal fun JSONObject.parseToModelPreCheckout(): PreCheckoutApiModel {
         for (i in 0 until length) {
             val item = itemsJson.getJSONObject(i)
             val preCheckoutItemData = PreCheckoutItemData(
-                id          = item.getInt("id"),
-                title       = item.getString("title"),
+                id = item.getInt("id"),
+                title = item.getString("title"),
                 description = item.getString("description"),
-                aboutUrl    = item.optString("about_url").takeIf { it.isNotEmpty() },
-                icon        = item.optString("logo").takeIf { it != "null" && it.isNotEmpty() }
+                aboutUrl = item.optString("about_url").takeIf { it.isNotEmpty() },
+                icon = item.optString("logo").takeIf { it != "null" && it.isNotEmpty() }
             )
             add(preCheckoutItemData)
         }
     }
 
     return PreCheckoutApiModel(
-        widgetId    = data.getInt("widget_id"),
-        base_colour = data.getString("base_colour"),
-        messages    = items
+        hidingTime = data.getLong("hiding_time"),
+        widgetId = data.getInt("widget_id"),
+        baseColour = data.getString("base_colour"),
+        messages = items,
+        sessionId = data.getString("session_id")
+    )
+}
+
+internal fun JSONObject.parseToModelClosePreCheckout(): PreCheckoutCloseApiModel {
+    return PreCheckoutCloseApiModel(
+        data = getString("data"),
+        status = getString("status"),
     )
 }

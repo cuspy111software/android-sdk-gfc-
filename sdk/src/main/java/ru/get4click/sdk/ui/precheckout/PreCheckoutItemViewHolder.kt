@@ -22,7 +22,7 @@ internal class PreCheckoutItemViewHolder(
         binding.textTitle.text = item.title
         binding.textDescription.text = item.description
         binding.textMore.isVisible = item.aboutUrl != null
-        binding.textMore.setOnClickListener { /* TODO */ }
+        binding.textMore.isVisible = false
 
         scope.launch(Dispatchers.IO) {
             if (item.icon != null) {
