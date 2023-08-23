@@ -1,5 +1,7 @@
 package ru.get4click.sdk.view
 
+import android.animation.Animator
+import android.animation.Animator.AnimatorListener
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.*
@@ -24,7 +26,7 @@ import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
 
-class FortuneWheelView(context: Context, attrs: AttributeSet) : View(context, attrs) {
+internal class FortuneWheelView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private val sectorsList: MutableList<Sector> = mutableListOf()
 
@@ -127,6 +129,7 @@ class FortuneWheelView(context: Context, attrs: AttributeSet) : View(context, at
         set(value) {
             field = value
             borderPaint.color = value
+            arrowPaint.color = value
             invalidate()
         }
 
@@ -217,7 +220,8 @@ class FortuneWheelView(context: Context, attrs: AttributeSet) : View(context, at
     fun spinToPosition(
         position: Int,
         spinDuration: Long = DEFAULT_SPIN_DURATION,
-        loopsBeforeStop: Int = SPINS_BEFORE_STOP
+        loopsBeforeStop: Int = SPINS_BEFORE_STOP,
+        onSpinComplete: () -> Unit = { }
     ) {
         val segmentDegrees = 360F / items.size
         val destinationRotation = 360F * (loopsBeforeStop + 1) - segmentDegrees * (position + 0.5F)
@@ -225,6 +229,15 @@ class FortuneWheelView(context: Context, attrs: AttributeSet) : View(context, at
         ObjectAnimator.ofFloat(this, null, 0F, destinationRotation)
             .apply {
                 addUpdateListener { rotationAnimValue = it.animatedValue as Float }
+                addListener(object : AnimatorListener {
+                    override fun onAnimationStart(animation: Animator) { /* no-op */ }
+                    override fun onAnimationCancel(animation: Animator) { /* no-op */ }
+                    override fun onAnimationRepeat(animation: Animator) { /* no-op */ }
+
+                    override fun onAnimationEnd(animation: Animator) {
+                        onSpinComplete.invoke()
+                    }
+                })
                 duration = spinDuration
                 interpolator = DecelerateInterpolator()
             }.start()
@@ -468,7 +481,7 @@ class FortuneWheelView(context: Context, attrs: AttributeSet) : View(context, at
     )
 
     companion object {
-        private const val MIN_RADIUS_PX = 100
+        private const val MIN_RADIUS_PX = 300
         private const val FULL_CIR_DEGREES = 360F
         private const val HALF_CIR_DEGREES = 180F
         private const val ICON_RELATIVE_START_POS = 0.3F

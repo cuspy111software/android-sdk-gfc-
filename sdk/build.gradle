@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.6.20-RC'
+    ext.kotlin_version = '1.7.21'
     repositories {
         mavenCentral()
     }
@@ -17,40 +17,28 @@ plugins {
 group = 'ru.get4click'
 version = '1.1.2'
 
-
- /*  publishing {
-       singleVariant('release') {
-           withSourcesJar()
-       }*/
-
-  /*     release(MavenPublication) {
-               groupId = 'ru.get4click'
-               artifactId = 'sdk'
-               version = '1.0-SNAPSHOT'
-
-               afterEvaluate {
-                   from components.release
-               }
-       }*/
- //  }
-
 publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'ru.get4click'
+            artifactId = 'sdk'
+            version = '1.2.0'
 
-     publications {
-          release(MavenPublication) {
-              groupId = 'ru.get4click'
-              artifactId = 'sdk'
-              version = '1.1.2'
-
-              afterEvaluate {
-                  from components.release
-              }
-          }
-      }
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = 'myrepo'
+            url = "${project.buildDir}/repo"
+        }
+    }
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
     publishing {
         singleVariant('release') {
             withSourcesJar()
@@ -60,19 +48,22 @@ android {
     defaultConfig {
 
         minSdk 21
-        targetSdk 32
+        targetSdk 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
     namespace = 'ru.get4click.sdk'
 
-
-
     buildTypes {
+        def BASE_API_URL = "BASE_API_URL"
+        debug {
+            buildConfigField "String", BASE_API_URL, "\"https://get4click.ru/api/\""
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", BASE_API_URL, "\"https://get4click.ru/api/\""
         }
     }
     compileOptions {
@@ -86,6 +77,10 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    packagingOptions {
+        pickFirst 'kotlinx/coroutines/*'
+    }
 }
 
 dependencies {
@@ -98,10 +93,18 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     // Lifecycle
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
+    implementation "androidx.lifecycle:lifecycle-runtime:2.5.1"
 
     // Networking
     implementation 'com.github.kittinunf.fuel:fuel:2.3.1'
     implementation 'com.github.kittinunf.fuel:fuel-coroutines:2.3.1'
     implementation 'com.github.kittinunf.fuel:fuel-json:2.3.1'
+}
+
+tasks.register('generateRepo', Zip) {
+    def publishTask = tasks.named('publishReleasePublicationToMyrepoRepository')
+    from publishTask.map { it.getRepository().getUrl() }
+    into 'mylibrary'
+    archiveFileName.set('mylibrary.zip')
 }

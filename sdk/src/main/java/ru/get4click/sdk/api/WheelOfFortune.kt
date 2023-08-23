@@ -1,8 +1,16 @@
 package ru.get4click.sdk.api
 
-import android.content.Context
+import android.widget.ImageView
 
 interface WheelOfFortune {
-    val ready: Boolean
-    fun show(context: Context)
+    /**
+     * Show the Wheel Of Fortune
+     */
+    fun show()
+
+    /**
+     * Returns [ImageView] button that can be used to show the Wheel Of Fortune. Returns null if
+     * the wheel is not initialized yet
+     */
+    fun getButton(): ImageView?
 }

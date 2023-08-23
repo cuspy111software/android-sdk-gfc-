@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@android:color/white"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/layout_top_part"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/margin_xxsmall"
+            android:paddingVertical="@dimen/margin_xxsmall"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false">
+
+                <FrameLayout
+                    android:id="@+id/layout_logo"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:layout_gravity="center_vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/layout_discount">
+                    <ImageView
+                        android:id="@+id/image_logo"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:scaleType="fitCenter"
+                        tools:ignore="ContentDescription" />
+
+                    <WebView
+                        android:id="@+id/webview_logo"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_discount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/margin_normal"
+                    android:paddingVertical="@dimen/margin_tiny"
+                    android:orientation="vertical"
+                    android:background="@drawable/discount_background"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintWidth_max="wrap"
+                    app:layout_constraintWidth_percent="0.4" >
+
+                    <TextView
+                        android:id="@+id/text_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/banner_promo_code_title_text_size"
+                        android:textStyle="bold"
+                        tools:text="-10%" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/discount_bottom_text_color"
+                        android:fontFamily="@font/averta_cy"
+                        android:textSize="@dimen/discount_bottom_text_size"
+                        android:textAllCaps="true"
+                        android:letterSpacing="0.4"
+                        android:text="@string/your_discount"/>
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/text_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:fontFamily="@font/averta_cy"
+                android:textColor="@color/banner_promo_code_text_color"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_normal"
+                tools:text="Some kind of long text long text long text long text long text. Long text long text long text"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_bottom_part"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/margin_xxsmall"
+            android:paddingVertical="@dimen/margin_xxsmall"
+            android:background="@color/banner_promo_primary_color"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_promo_code_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/averta_cy"
+                android:textStyle="bold"
+                android:textSize="@dimen/banner_promo_code_title_text_size"
+                tools:text="Your promo code"/>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_xxsmall"
+                app:boxBackgroundColor="@android:color/white"
+                app:boxStrokeWidth="0dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_promo_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:inputType="none"
+                    android:enabled="false"
+                    android:gravity="center"
+                    android:textColor="@color/banner_promo_code_text_color"
+                    tools:text="DKOADKO21321321ASDAASD"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_copy"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/promo_code_copy_button_height"
+                android:layout_marginTop="@dimen/margin_xxsmall"
+                android:backgroundTint="@color/color_primary"
+                android:textSize="@dimen/text_size_big"
+                android:textAllCaps="false"
+                android:text="@string/copy"/>
+
+            <TextView
+                android:id="@+id/text_button_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/averta_cy"
+                android:text="@string/promo_code_already_applied"/>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
